@@ -1,1 +1,0 @@
-{"error":{"root_cause":[{"type":"action_request_validation_exception","reason":"Validation Failed: 1: multi term vectors: no documents requested;"}],"type":"action_request_validation_exception","reason":"Validation Failed: 1: multi term vectors: no documents requested;"},"status":400}

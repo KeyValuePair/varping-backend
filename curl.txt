@@ -1,0 +1,61 @@
+curl -XPUT http://localhost:9200/a/test/1 -d '{   "name" : "bowon",   "age" : "20" }'
+
+
+
+curl -XPUT http://localhost:9200/a/test/2 -d '{   "name" : "yangbo",   "age" : "20" }'
+curl -XPUT http://localhost:9200/a/test/3 -d '{   "name" : "json",   "age" : "22" }'
+curl -XPUT http://localhost:9200/a/test/4 -d '{   "name" : "python",   "age" : "23" }'
+
+
+
+curl 'http://localhost:9200/a/test/_search?q=name:bowon&pretty=true'
+
+
+
+curl 'http://localhost:9200/original_code/javascript/1/_termvectors?pretty=true' -d '{
+  "fields" : ["text"],
+  "term_statistics" : true,
+  "field_statistics" : true
+}'
+
+
+curl 'localhost:9200/original_code/javascript/_mtermvectors' -d '{
+    "ids": ["1", "2"],
+    "parameters": {
+        "fields": [
+                "text"
+        ],
+        "term_statistics": true
+    }
+}'
+
+curl 'localhost:9200/original_code/javascript/_mtermvectors?min_word_length=3' -d '{
+    "ids": ["1", "2"],
+    "parameters": {
+        "fields": [
+                "text"
+        ],
+        "term_statistics": true
+    }
+}'
+
+
+curl -v -H 'localhost:9200/original_code/javascript/_mtermvectors?min_word_length=3' -d '{
+    "ids": ["1", "2"],
+    "parameters": {
+        "fields": [
+                "text"
+        ],
+        "term_statistics": true
+    }
+}'
+
+
+
+* search query
+
+curl -XGET 'http://localhost:9200/refined_words/javascript/_search?q=term:r*'
+
+* delete query
+
+curl -XDELETE 'http://localhost:9200/refined_words'

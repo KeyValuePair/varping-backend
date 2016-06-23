@@ -2,12 +2,13 @@
 import urllib2
 from urllib import urlencode, quote
 import json
-from util import getElasticSearch
+from util import getElasticSearch, deleteIndex, getIDListString
 
-def getMTermVectors(language):
+def getSortedMTermVectors(language):
     params = """{
-            "ids": ["1", "2"],
-            "parameters": {
+            "ids": """ + getIDListString('original_code', language) + \
+            """
+            , "parameters": {
                 "fields": [
                     "text"
                     ],
@@ -28,25 +29,25 @@ def getMTermVectors(language):
             temp_obj['term'] = str(key)
             temp_obj['ttf'] = value[u'ttf']
             terms.append(temp_obj)
+    terms = sorted(terms, key=lambda x: x[u'ttf'], reverse=True)
     return terms
 
-#print(terms[0])
+def indexRefinedWords(language, terms):
+    es = getElasticSearch()
+    count = 1
+    for term in terms:
+        doc = {
+            'deleted' : 0,
+            'displayed': 0,
+            'term': term['term'],
+            'ttf': term['ttf']
+            }
+        es.index(index="refined_words", doc_type="javascript",
+                id=count, body=doc)
+        count += 1
 
+deleteIndex('refined_words')
+terms = getSortedMTermVectors('javascript')
+indexRefinedWords('javascript', terms)
 
-terms = sorted(terms, key=lambda x: x[u'ttf'], reverse=True)
-print(terms)
-
-
-
-es = getElasticSearch()
-count = 0
-for term in terms:
-    doc = {
-        'deleted' : 0,
-        'displayed': 0,
-        'term': term['term'],
-        'ttf': term['ttf']
-        }
-    es.index(index="refined_words", doc_type="javascript", id=count, body=doc)
-    count += 1
 
