@@ -1,6 +1,13 @@
 #-*- coding: utf8 -*-
+import re
 from elasticsearch import Elasticsearch
 import os, sys
+
+
+def removeComments(string):
+    string = re.sub(re.compile("/\*.*?\*/",re.DOTALL ) ,"" ,string)
+    string = re.sub(re.compile("//.*?\n" ) ,"" ,string)
+    return string
 
 es = Elasticsearch([
     {'host': 'localhost'}
@@ -18,10 +25,15 @@ count = 1
 for file in dirs:
     if file.endswith(".js"):
         js_files.append(file)
-        print(file)
+        #print(file)
         with open('../src/'+file, "r") as js_file:
-            content = js_file.read()
+            content = removeComments(js_file.read())
+            print(content)
+
             doc['text'] = content
             res = es.index(index="original_code", doc_type="javascript", id=count, 
                     body=doc)
             count += 1
+
+
+

@@ -16,12 +16,21 @@ params = """{
 url = "http://localhost:9200/original_code/javascript/_mtermvectors"        
 
 
-print(url)
 request = urllib2.Request(url, data=params)
 response = urllib2.urlopen(request)
 
 res = json.load(response)
 term = res['docs'][0]['term_vectors']['text']['terms']
-print(term_vectors)
+terms = []
+for key, value in term.iteritems():
+    if len(key) >= 2 and value[u'ttf'] >= 10 :
+        temp_obj = {}
+        temp_obj['term'] = str(key)
+        temp_obj['ttf'] = value[u'ttf']
+        terms.append(temp_obj)
+
+#print(terms[0])
 
 
+terms = sorted(terms, key=lambda x: x[u'ttf'], reverse=True)
+print(terms)
