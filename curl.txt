@@ -59,3 +59,9 @@ curl -XGET 'http://localhost:9200/refined_words/javascript/_search?q=term:r*'
 * delete query
 
 curl -XDELETE 'http://localhost:9200/refined_words'
+
+
+* sort
+
+
+curl -XGET 'http://192.168.0.16:9200/refined_words/javascript/_search?q=term:r*&sort=ttf:desc&pretty=true'
