@@ -1,8 +1,9 @@
+#!../venv/bin/python
 #-*- coding: utf8 -*-
 import os, sys
 from util import removeComments, getElasticSearch, deleteIndex
 
-def getFiles(path, extension="js"):
+def getFilesIn(path, extension="js"):
     files = os.listdir(path)
     files_to_index = []
     for file in files:
@@ -16,18 +17,19 @@ def indexCodes(path, files, doc):
     for file in files:
         with open(path+file, "r") as file:
             content = removeComments(file.read())
+
             doc['text'] = content
             es.index(index="original_code", doc_type=doc['language'], id=count,
                 body=doc)
             count += 1
 
 
+if __name__ == "__main__":
+    doc = {
+            'language': 'javascript',
+            'text': '',
+            }
 
-doc = {
-        'language': 'javascript',
-        'text': '',
-}
-
-path = "../src/"
-deleteIndex('original_code')
-indexCodes(path, getFiles(path, "js"), doc)
+    path = "../../src/"
+    deleteIndex('original_code')
+    indexCodes(path, getFilesIn(path, "js"), doc)
