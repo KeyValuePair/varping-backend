@@ -1,3 +1,4 @@
+#!venv/bin/python
 #-*- coding: utf-8 -*-
 import urllib2
 from urllib import urlencode, quote
@@ -19,6 +20,7 @@ def getSortedMTermVectors(language):
     url = "http://localhost:9200/original_code/"+ language +"/_mtermvectors"
     request = urllib2.Request(url, data=params)
     response = urllib2.urlopen(request)
+
     res = json.load(response)
 
     term = res['docs'][0]['term_vectors']['text']['terms']
@@ -46,8 +48,10 @@ def indexRefinedWords(language, terms):
                 id=count, body=doc)
         count += 1
 
-deleteIndex('refined_words')
-terms = getSortedMTermVectors('javascript')
-indexRefinedWords('javascript', terms)
+
+if __name__ == "__main__":
+    deleteIndex('refined_words')
+    terms = getSortedMTermVectors('javascript')
+    indexRefinedWords('javascript', terms)
 
 
