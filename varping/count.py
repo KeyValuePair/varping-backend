@@ -1,4 +1,4 @@
-#!venv/bin/python
+#!../venv/bin/python
 #-*- coding: utf-8 -*-
 import urllib2
 from urllib import urlencode, quote

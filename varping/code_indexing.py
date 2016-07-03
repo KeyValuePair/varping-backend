@@ -1,4 +1,4 @@
-#!venv/bin/python
+#!../venv/bin/python
 #-*- coding: utf8 -*-
 import os, sys
 from util import removeComments, getElasticSearch, deleteIndex
@@ -30,6 +30,6 @@ if __name__ == "__main__":
             'text': '',
             }
 
-    path = "../src/"
+    path = "../../src/"
     deleteIndex('original_code')
     indexCodes(path, getFilesIn(path, "js"), doc)
