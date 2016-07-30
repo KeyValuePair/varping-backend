@@ -35,9 +35,13 @@ def getSortedMTermVectors(language):
     return terms
 
 def indexRefinedWords(language, terms):
+    black_list = ['return']
     es = getElasticSearch()
     count = 1
     for term in terms:
+        # black list....!
+        if term['term'] in black_list:
+            continue
         doc = {
             'deleted' : 0,
             'displayed': 0,
